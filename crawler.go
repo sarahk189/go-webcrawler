@@ -1,29 +1,32 @@
 package main
 
+// //These are tools we're borrowing from Go's toolbox.
+// Each one adds special abilities to our program.
 import (
-    "fmt"
-    "net/http"
-    "golang.org/x/net/html"
-    "net/url"
+   "fmt"                     // Lets us print messages (like a log)
+    "net/http"               // Lets us make web requests (go visit a page)
+    "golang.org/x/net/html"  // Lets us read and understand HTML (like reading page code)
+    "net/url"                // Helps us work with URLs (fixing links, comparing domains)
 )
 
+//map to keep track of visited pages
 var visited = make(map[string]bool)
 
-func Crawl(start string) []string {
-    visited = make(map[string]bool) // reset
-    base, _ := url.Parse(start)
-    crawl(start, base)
+func Crawl(startUrl string) []string {
+    visited = make(map[string]bool) // reset the map for each crawl, starting fresh
+    base, _ := url.Parse(startUrl) // lets you acess and manipulate components of the URL
+    crawl(startUrl, base)
     
-    pages := []string{}
-    for page := range visited {
-        pages = append(pages, page)
+    pages := []string{} // slice to store the visited pages
+    for page := range visited {  //iterating over the map to get the visited pages
+        pages = append(pages, page) //adding the visited pages to a slice
     }
-    return pages
+    return pages //returning the slice of visited pages
 }
 
 func crawl(link string, base *url.URL) {
-    if visited[link] {
-        return
+    if visited[link] { // check if the link has already been visited
+        return 
     }
 
     visited[link] = true
